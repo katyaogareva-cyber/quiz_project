@@ -1,0 +1,26 @@
+# Virtual environment
+venv/
+env/
+
+# Database
+db.sqlite3
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Django
+*.log
+
+# Mac system files
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Your accidental heavy build folder
+Installbrowser/
+*.app
+*.dylib
+*.framework
