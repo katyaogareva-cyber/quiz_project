@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import Role, PermissionRule
+from .models import PermissionRule
 
 admin.site.register(PermissionRule)
-admin.site.register(Role)

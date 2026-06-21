@@ -2,7 +2,6 @@ from rest_framework.permissions import BasePermission
 from .models import PermissionRule
 
 class HasActionPermission(BasePermission):
-
     ACTION_MAP = {
         "list": "read",
         "retrieve": "read",
