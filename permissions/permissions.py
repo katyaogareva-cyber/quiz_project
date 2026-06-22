@@ -1,30 +1,40 @@
 from rest_framework.permissions import BasePermission
-from .models import PermissionRule
+from permissions.models import AccessRolesRules
 
-class HasActionPermission(BasePermission):
-    ACTION_MAP = {
-        "list": "read",
-        "retrieve": "read",
-        "create": "create",
-        "update": "update",
-        "partial_update": "update",
-        "destroy": "delete",
-    }
+
+class HasAccessPermission(BasePermission):
 
     def has_permission(self, request, view):
-        user = request.user
 
-        if not user or not user.is_authenticated:
+        if not request.user or not request.user.is_authenticated:
             return False
 
-        action = self.ACTION_MAP.get(getattr(view, "action", None))
-        resource = getattr(view, "resource", None)
-
-        if not action or not resource:
+        element = getattr(view, "element", None)
+        if not element:
             return False
 
-        return PermissionRule.objects.filter(
-            role__in=user.roles.all(),
-            resource=resource,
-            action=action
-        ).exists()
+        action_map = {
+            "GET": "read_permission",
+            "POST": "create_permission",
+            "PUT": "update_permission",
+            "PATCH": "update_permission",
+            "DELETE": "delete_permission",
+        }
+
+        action = action_map.get(request.method)
+        if not action:
+            return False
+
+        rules = AccessRolesRules.objects.filter(
+            role__in=request.user.roles.all(),
+            element__name=element
+        )
+
+        if not rules.exists():
+            return False
+
+        for rule in rules:
+            if getattr(rule, action, False):
+                return True
+
+        return False

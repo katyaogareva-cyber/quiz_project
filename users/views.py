@@ -3,14 +3,15 @@ from rest_framework.response import Response
 
 from .models import User
 from .serializers import UserSerializer
-from permissions.permissions import HasActionPermission
+from permissions.permissions import HasAccessPermission
 
 
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [HasActionPermission]
-    resource = "user"
+    permission_classes = [HasAccessPermission]
+
+    element = "user"
 
     def destroy(self, request, *args, **kwargs):
         user = self.get_object()

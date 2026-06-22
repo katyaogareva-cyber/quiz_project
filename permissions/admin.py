@@ -1,4 +1,5 @@
 from django.contrib import admin
-from .models import PermissionRule
+from .models import AccessRolesRules, BusinessElement
 
-admin.site.register(PermissionRule)
+admin.site.register(AccessRolesRules)
+admin.site.register(BusinessElement)

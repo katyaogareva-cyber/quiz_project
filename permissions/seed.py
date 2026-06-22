@@ -1,30 +1,31 @@
 from users.models import Role
-from permissions.models import PermissionRule
+from permissions.models import BusinessElement, AccessRolesRules
+
 
 def run():
     admin = Role.objects.get(name="admin")
     editor = Role.objects.get(name="editor")
     viewer = Role.objects.get(name="viewer")
 
-    rules = [
-        (admin, "role", "create"),
-        (admin, "role", "read"),
-        (admin, "role", "update"),
-        (admin, "role", "delete"),
+    user_el, _ = BusinessElement.objects.get_or_create(name="user")
+    role_el, _ = BusinessElement.objects.get_or_create(name="role")
 
-        (admin, "user", "read"),
-        (editor, "user", "update"),
-        (viewer, "user", "read"),
-
-        (admin, "permissionrule", "create"),
-        (admin, "permissionrule", "read"),
-        (admin, "permissionrule", "update"),
-        (admin, "permissionrule", "delete"),
-    ]
-
-    for role, resource, action in rules:
-        PermissionRule.objects.get_or_create(
-            role=role,
-            resource=resource,
-            action=action
+    AccessRolesRules.objects.get_or_create(
+        role=admin,
+        element=user_el,
+        defaults=dict(
+            read_permission=True,
+            create_permission=True,
+            update_permission=True,
+            delete_permission=True,
+            read_all_permission=True,
         )
+    )
+
+    AccessRolesRules.objects.get_or_create(
+        role=viewer,
+        element=user_el,
+        defaults=dict(
+            read_permission=True,
+        )
+    )

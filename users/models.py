@@ -40,5 +40,7 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
-    roles = models.ManyToManyField("Role")
+    # ✅ ВАЖНО: у пользователя может быть несколько ролей
+    roles = models.ManyToManyField(Role, related_name="users")
+
     objects = UserManager()

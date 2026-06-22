@@ -3,7 +3,7 @@ from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 from users.views import UserViewSet
-from permissions.views import RoleViewSet, PermissionRuleViewSet
+from permissions.views import RoleViewSet, AccessRolesRulesViewSet
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -13,7 +13,7 @@ from rest_framework_simplejwt.views import (
 router = DefaultRouter()
 router.register(r"users", UserViewSet)
 router.register(r"roles", RoleViewSet)
-router.register(r"permissions", PermissionRuleViewSet)
+router.register(r"access-rules", AccessRolesRulesViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -22,4 +22,5 @@ urlpatterns = [
     path("api/token/refresh/", TokenRefreshView.as_view()),
 
     path("api/", include(router.urls)),
+    path("api/", include("core.urls")),
 ]
